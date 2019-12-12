@@ -6,7 +6,9 @@
 
 #include <stdio.h>
 #include "../Headers/coordonnees.h"
-
+#include "../Headers/gestion_de_fichier.h"
+#include "../Headers/e_mail.h"
+#include "../Headers/keywords.h"
 int main(int argc, char **argv)
 {
 	
