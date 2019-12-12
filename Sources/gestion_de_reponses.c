@@ -1,4 +1,4 @@
-#include "../Headers/gestion_de_fichier.h"
+#include "../Headers/reponses.h"
 #include <stdio.h>
 #include <string.h>
 #define DEMANDE_CONFIRMATION 0
@@ -24,22 +24,20 @@ void fermer(FILE*fichier_ouvert)
 
 void ajout(FILE *fichier)
 {
-	COORDONNEES new_coordonnees;
+	REPONSE new_coordonnees;
 	char choix;
 	
 	printf("ajout\n");
 	/*memset memory set , force la valeur d'un champs de donnees */
-	memset(&new_coordonnees,0,sizeof(new_coordonnees));
+	memset(&new_reponse,0,sizeof(new_reponse));
 	
 	/* pour ajouter un nouveau client on le place a la fin*/
 	fseek(fichier,0,SEEK_END);
 	
-	printf("saisir nom : ");
-	scanf("%s",new_coordonnees.nom);
-	printf("saisir prenom : ");
-	scanf("%s",new_coordonnees.prenom);
-	printf("saisir adresse e-mail : ");
-	scanf("%s",new_coordonnees.adresse_mail);
+	printf("saisir mot cle : ");
+	scanf("%s",new_reponse.keyword);
+	printf("saisir reponse : ");
+	scanf("%s",new_reponse.reponse);
 	getchar();
 	
 	affichercoordonnees(&new_coordonnees);

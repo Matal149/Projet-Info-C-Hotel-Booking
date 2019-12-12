@@ -8,3 +8,4 @@ typedef struct
 	char OBJ[TAILLE_OBJET];
 	char CORPS[TAILLE_CORPS];	
 }email;
+

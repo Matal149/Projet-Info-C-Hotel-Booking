@@ -11,8 +11,11 @@
 int main(int argc, char **argv)
 {
 	
-	FILE*fichier_coordonnes=NULL;
-	fichier_coordonnes = ouvrir("coordonnees.bin");
+	//~ FILE*fichier_coordonnes=NULL;
+	//~ fichier_coordonnes = ouvrir("coordonnees.bin");
+	//~ ajout(fichier_coordonnes);
+	//~ affiche(fichier_coordonnes);
+	//~ lister(fichier_coordonnes);
 	return 0;
 }
 

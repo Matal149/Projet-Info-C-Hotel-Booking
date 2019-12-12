@@ -3,6 +3,7 @@
 #include "coordonnees.h"
 
 
+
 FILE*ouvrir(char*nom_fichier);
 void fermer(FILE*fichier_ouvert);
 void ajout(FILE *fichier);
