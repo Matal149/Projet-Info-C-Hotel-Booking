@@ -4,5 +4,5 @@
 
 typedef struct{
 	char villes[NB_VILLES][TAILLE_VILLES] = {"Toulon", "Paris", "Lyon", "Poitiers", "Orange", "Toulouse", "Caen", "Marseille", "Rouen", "Troyes"};
-	char types_resrvation[10][25] = {"week-end","vacances"}; 
+	char types_resrvation[10][25] = {"week-end","weekend", "week end", "vacances"}; 
 }KEYWORDS;
