@@ -6,5 +6,5 @@ typedef struct {
 	char nom[TAILLE_NOM];
 	char prenom[TAILLE_NOM];
 	char adresse_mail[TAILLE_MAIL];
-	float importance;	
+	float importance;
 }COORDONNEES;

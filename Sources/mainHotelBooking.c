@@ -11,8 +11,8 @@
 int main(int argc, char **argv)
 {
 	
-	FILE*nom_fichier=NULL;
-	nom_fichier=ouvrir("coordonnees.bin");
+	FILE*fichier_coordonnes=NULL;
+	fichier_coordonnes = ouvrir("coordonnees.bin");
 	return 0;
 }
 
