@@ -24,7 +24,7 @@ void fermer(FILE*fichier_ouvert)
 
 void ajout(FILE *fichier)
 {
-	REPONSE new_coordonnees;
+	REPONSE new_reponse;
 	char choix;
 	
 	printf("ajout\n");
@@ -40,100 +40,70 @@ void ajout(FILE *fichier)
 	scanf("%s",new_reponse.reponse);
 	getchar();
 	
-	affichercoordonnees(&new_coordonnees);
+	afficherreponse(&new_reponse);
 	if( DEMANDE_CONFIRMATION == 1)
 	{
-		printf("confirmer l'ajout de coordonnees? ( Y/n ) : ");
+		printf("confirmer l'ajout de reponse? ( Y/n ) : ");
 		scanf("%c",&choix);getchar();
 		if( choix == 'n' || choix == 'N')
 		{
-			printf("abandon creation de coordonnees \n");
+			printf("abandon creation de reponse \n");
 			return;
 		}
 	}
-	fwrite(&new_coordonnees,sizeof(COORDONNEES),1,fichier);
-	printf("coordonnees cree\n");	
+	fwrite(&new_reponse,sizeof(REPONSE),1,fichier);
+	printf("reponse cree\n");	
 }
 
 void affiche(FILE *fichier)
 {
-	COORDONNEES coordonnees;
-	char nom_recherche[TAILLE_NOM];
-	char prenom_recherche[TAILLE_NOM];
-	char choix;
-	printf("affiche\n");
+	REPONSE reponse;
+	char keyword_recherche[TAILLE_KEYWORD];
 	
-	printf("choix du critere de recherche d'un client :\n");
-	printf("1 : nom | 2 prenom \n");
-	scanf("%c",&choix);getchar();
-	switch(choix)
-	{
-		case '1':
-			printf("saisi du nom a rechercher : ");
-			scanf("%s",nom_recherche);getchar();
-			break;
-			
-		case '2':
-			printf("saisi du prenom a rechercher : ");
-			scanf("%s",prenom_recherche);getchar();
-			break;
-			
-		default :
-			printf("critere inconnu : abandon \n");
-			return;
-	}
+	printf("affiche\n");
+	printf("saisi du mot cle a rechercher : ");
+	scanf("%s",keyword_recherche);getchar();			
+}
 	
 /*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
 /* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
-	while(fread(&coordonnees,sizeof(COORDONNEES),1,fichier)!=0)
+	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
-/* pour chaque mode de recherche on va appliquer la bonne comparaison*/
-		if(choix == '1')
-		{
-			if(strcmp(nom_recherche,coordonnees.nom)==0)
+
+			if(strcmp(keyword_recherche,reponse.keyword)==0)
 			{
-				printf("coordonnees trouve\n");
-				affichercoordonnees(&coordonnees);
+				printf("reponse trouve\n");
+				afficherreponse(&reponse);
 				return;
 			}
-		}
-		else if ( choix == '2')
-		{
-			if(strcmp(prenom_recherche,coordonnees.prenom)==0)
-			{
-				printf("coordonnees trouve\n");
-				affichercoordonnees(&coordonnees);
-				return;
-			}
-		}
+		
 	}
 /* si on est arrive ici on n'a donc pas trouver le client */	
-	printf("Client introuvable \n");
+	printf("Reponse introuvable \n");
 	
 }
 
 void lister(FILE *fichier)
 {
-	COORDONNEES coordonnees;
-	int nombre_client=0;
+	REPONSE reponse;
+	int nombre_reponse=0;
 	printf("lister\n");
 	/*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
 /* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
-	while(fread(&coordonnees,sizeof(COORDONNEES),1,fichier)!=0)
+	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
-		affichercoordonnees(&coordonnees);
-		nombre_client++;
+		afficherreponse(&reponse);
+		nombre_reponse++;
 	}
 /* non demander par l'exo mais c'est facile a compter */
 	printf("il y a %d clients\n",nombre_client);
 }
 
-void affichercoordonnees(COORDONNEES*coordonnees)
+void affichercoordonnees(REPONSE*reponse)
 {
-	if(coordonnees==NULL)return;
-	printf("nom : %s\n",coordonnees->nom);
-	printf("prenom : %s\n",coordonnees->prenom);
-	printf("adresse mail : %s\n",coordonnees->adresse_mail);
+	if(reponse==NULL)return;
+	printf("mot cle : %s\n",reponse->keyword);
+	printf("Reponse : %s\n",reponse->reponse);
 }
