@@ -10,9 +10,9 @@ typedef struct{
 	email reponse;
 }REPONSE;
 
-FILE*ouvrir(char*nom_fichier);
-void fermer(FILE*fichier_ouvert);
-void ajout(FILE *fichier);
-void affiche(FILE *fichier);
-void lister(FILE *fichier);
-void afficherreponse(REPONSE*reponse);
+FILE*ouvrirReponse(char*nom_fichier);
+void fermerReponse(FILE*fichier_ouvert);
+void ajoutReponse(FILE *fichier);
+void afficheReponse(FILE *fichier);
+void listerReponse(FILE *fichier);
+void afficherReponse(REPONSE*reponse);

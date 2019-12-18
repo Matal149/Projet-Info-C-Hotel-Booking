@@ -3,7 +3,7 @@
 #include <string.h>
 #define DEMANDE_CONFIRMATION 0
 
-FILE*ouvrir(char*nom_fichier)
+FILE*ouvrirReponse(char*nom_fichier)
 {
 	FILE*f=NULL;
 	printf("ouverture du fichier [%s]\n",nom_fichier);
@@ -16,13 +16,13 @@ FILE*ouvrir(char*nom_fichier)
 	return f;	
 }
 
-void fermer(FILE*fichier_ouvert)
+void fermerReponse(FILE*fichier_ouvert)
 {
 	printf("fermeture du fichier\n");
 	fclose (fichier_ouvert);
 }
 
-void ajout(FILE *fichier)
+void ajoutReponse(FILE *fichier)
 {
 	REPONSE new_reponse;
 	char choix;
@@ -35,12 +35,12 @@ void ajout(FILE *fichier)
 	fseek(fichier,0,SEEK_END);
 	
 	printf("saisir mot cle : ");
-	scanf("%s",new_reponse.keyword);
+	scanf("%s",*new_reponse.keyword.villes);
 	printf("saisir reponse : ");
-	scanf("%s",new_reponse.reponse);
+	scanf("%s",new_reponse.reponse.CORPS);
 	getchar();
 	
-	afficherreponse(&new_reponse);
+	afficherReponse(&new_reponse);
 	if( DEMANDE_CONFIRMATION == 1)
 	{
 		printf("confirmer l'ajout de reponse? ( Y/n ) : ");
@@ -55,7 +55,7 @@ void ajout(FILE *fichier)
 	printf("reponse cree\n");	
 }
 
-void affiche(FILE *fichier)
+void afficheReponse(FILE *fichier)
 {
 	REPONSE reponse;
 	char keyword_recherche[TAILLE_KEYWORD];
@@ -63,7 +63,7 @@ void affiche(FILE *fichier)
 	printf("affiche\n");
 	printf("saisi du mot cle a rechercher : ");
 	scanf("%s",keyword_recherche);getchar();			
-}
+
 	
 /*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
@@ -71,10 +71,10 @@ void affiche(FILE *fichier)
 	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
 
-			if(strcmp(keyword_recherche,reponse.keyword)==0)
+			if(strcmp(keyword_recherche,*reponse.keyword.villes)==0)
 			{
 				printf("reponse trouve\n");
-				afficherreponse(&reponse);
+				afficherReponse(&reponse);
 				return;
 			}
 		
@@ -84,7 +84,7 @@ void affiche(FILE *fichier)
 	
 }
 
-void lister(FILE *fichier)
+void listerReponse(FILE *fichier)
 {
 	REPONSE reponse;
 	int nombre_reponse=0;
@@ -94,16 +94,16 @@ void lister(FILE *fichier)
 /* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
 	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
-		afficherreponse(&reponse);
+		afficherReponse(&reponse);
 		nombre_reponse++;
 	}
 /* non demander par l'exo mais c'est facile a compter */
-	printf("il y a %d clients\n",nombre_client);
+	printf("il y a %d clients\n",nombre_reponse);
 }
 
-void affichercoordonnees(REPONSE*reponse)
+void afficherReponse(REPONSE*reponse)
 {
 	if(reponse==NULL)return;
-	printf("mot cle : %s\n",reponse->keyword);
-	printf("Reponse : %s\n",reponse->reponse);
+	printf("mot cle : %s\n",*reponse->keyword.villes);
+	printf("Reponse : %s\n",reponse->reponse.CORPS);
 }
