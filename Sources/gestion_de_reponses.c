@@ -31,7 +31,7 @@ void ajoutReponse(FILE *fichier)
 	/*memset memory set , force la valeur d'un champs de donnees */
 	memset(&new_reponse,0,sizeof(new_reponse));
 	
-	/* pour ajouter un nouveau client on le place a la fin*/
+	/* pour ajouter un nouvelle reponse on le place a la fin*/
 	fseek(fichier,0,SEEK_END);
 	
 	printf("saisir mot cle : ");
@@ -62,22 +62,20 @@ void afficheReponse(FILE *fichier)
 	
 	printf("affiche\n");
 	printf("saisi du mot cle a rechercher : ");
-	scanf("%s",keyword_recherche);getchar();			
-
+	scanf("%s",keyword_recherche);
+	getchar();
 	
 /*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
-/* on va lire des REPONSE du fichier un par un jusqua la fin du fichier*/
+/* on va lire des REPONSE du fichier un par un jusqu'à la fin du fichier*/
 	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
-
-			if(strcmp(keyword_recherche,*reponse.keyword.villes)==0)
-			{
-				printf("reponse trouve\n");
-				afficherReponse(&reponse);
-				return;
-			}
-		
+		if(strcmp(keyword_recherche,*reponse.keyword.villes)==0)
+		{
+			printf("reponse trouve\n");
+			afficherReponse(&reponse);
+			return;
+		}
 	}
 /* si on est arrive ici on n'a donc pas trouver le client */	
 	printf("Reponse introuvable \n");
@@ -98,12 +96,12 @@ void listerReponse(FILE *fichier)
 		nombre_reponse++;
 	}
 /* non demander par l'exo mais c'est facile a compter */
-	printf("il y a %d clients\n",nombre_reponse);
+	printf("il y a %d réponses possibles\n",nombre_reponse);
 }
 
 void afficherReponse(REPONSE*reponse)
 {
 	if(reponse==NULL)return;
-	printf("mot cle : %s\n",*reponse->keyword.villes);
-	printf("Reponse : %s\n",reponse->reponse.CORPS);
+	printf("mot cle (nom de ville) : %s\n",*reponse->keyword.villes);
+	printf("Reponse associée au nom de la ville: %s\n",reponse->reponse.CORPS);
 }

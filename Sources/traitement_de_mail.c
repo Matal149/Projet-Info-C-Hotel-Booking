@@ -48,19 +48,19 @@ email saisieMail(FILE *fichier)
 	scanf(" %[^\t\n]s",new_mail.CORPS);
 	getchar();
 	
-	afficherMail(&new_mail);
+	//~ afficherMail(&new_mail);
 	if( DEMANDE_CONFIRMATION == 1)
 	{
-		printf("confirmer l'ajout de reponse? ( Y/n ) : ");
+		printf("confirmer l'envoit du mail? ( Y/n ) : ");
 		scanf("%c",&choix);getchar();
 		if( choix == 'n' || choix == 'N')
 		{
-			printf("abandon creation de reponse \n");
+			printf("abandon creation de mail \n");
 			return;
 		}
 	}
 	fwrite(&new_mail,sizeof(email),1,fichier);
-	printf("reponse cree\n");
+	printf("mail envoyé\n");
 	return new_mail;
 }
 
@@ -76,9 +76,9 @@ void afficherMail(email*mail)
 }
 
 
-void envoiReponseMail(FILE *fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes)
+void envoiReponseMail(FILE* fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes)
 {
-	REPONSE reponse;
+	REPONSE reponse_automatique;
 	email new_mail;
 	//~ char choix;
 	
@@ -86,21 +86,47 @@ void envoiReponseMail(FILE *fichier_reponses, email mailRecu, FILE* fichier_mail
 	/*memset memory set , force la valeur d'un champs de donnees */
 	memset(&new_mail,0,sizeof(new_mail));
 	
-	/* pour ajouter un nouveau client on le place a la fin*/
-	fseek(fichier_reponses,0,SEEK_END);
+	memset(&reponse_automatique,0,sizeof(reponse_automatique));
 	
-	while(fread(&reponse,sizeof(REPONSE),1,fichier_reponses)!=0)
-	{
-		printf("CACA\n");
-		if(strstr(mailRecu.CORPS, *reponse.keyword.villes) != NULL){
-			*new_mail.EM = *mailRecu.DEST;
-			*new_mail.DEST = *mailRecu.EM;
-			*new_mail.CORPS = *reponse.reponse.CORPS;
+	/* pour ajouter un nouveau client on le place a la fin*/
+	fseek(fichier_reponses,0,SEEK_SET);
+	
+	//~ while(fread(&reponse,sizeof(REPONSE),1,fichier_reponses)!=0)
+	//~ {
+		//~ printf("CACA\n");
+		//~ if(strstr(mailRecu.CORPS, *reponse.keyword.villes) != NULL){
+			//~ *new_mail.EM = *mailRecu.DEST;
+			//~ *new_mail.DEST = *mailRecu.EM;
+			//~ *new_mail.CORPS = *reponse.reponse.CORPS;
+			//~ fwrite(&new_mail,sizeof(email),1,fichier_mailEnvoyes);
+			//~ printf("reponse trouve\n");
+			//~ return;
+		//~ }
+	//~ }
+	printf("CORPS MAIL RECU = %s\n", mailRecu.CORPS);
+	while(fread(&reponse_automatique,sizeof(REPONSE),1,fichier_reponses)!=0)
+	{	
+		if(strstr(mailRecu.CORPS, *reponse_automatique.keyword.villes) != NULL)
+		{
+			//~ *new_mail.EM = *mailRecu.DEST;
+			strcat(new_mail.EM , mailRecu.DEST);
+
+			//~ *new_mail.DEST = *mailRecu.EM;
+			//~ strcpy(new_mail.OBJ, "RE : ");
+			strcat(new_mail.DEST , mailRecu.EM);
+			
+			strcpy(new_mail.OBJ, "RE : ");
+			strcat(new_mail.OBJ , mailRecu.OBJ);
+			
+			//~ *new_mail.CORPS = *reponse_automatique.reponse.CORPS;
+			strcat(new_mail.CORPS , reponse_automatique.reponse.CORPS);
 			fwrite(&new_mail,sizeof(email),1,fichier_mailEnvoyes);
+			afficherMail(&new_mail);
 			printf("reponse trouve\n");
 			return;
 		}
 	}
+	
 /* si on est arrive ici on n'a donc pas trouver le client */	
 	printf("Reponse introuvable \n");
 }

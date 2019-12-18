@@ -25,10 +25,6 @@ int main(int argc, char **argv)
 	fichier_keywords = ouvrirReponse("reponses.bin");
 	fichier_mail = ouvrir("mailsRecu.bin");
 	fichier_mailEnvoyes = ouvrir("mailsEnvoyes.bin");
-	//~ ajout(fichier_coordonnes);
-	//~ affiche(fichier_coordonnes);
-	//~ lister(fichier_coordonnes);
-	
 	
 	menuGeneral(fichier_coordonnees, fichier_keywords, fichier_mail, fichier_mailEnvoyes);
 	

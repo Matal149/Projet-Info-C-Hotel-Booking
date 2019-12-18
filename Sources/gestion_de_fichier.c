@@ -120,7 +120,7 @@ void lister(FILE *fichier)
 {
 	COORDONNEES coordonnees;
 	int nombre_client=0;
-	printf("lister\n");
+	printf("lister les coordonnes des clients de la base de données\n");
 	/*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
 /* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
@@ -129,7 +129,6 @@ void lister(FILE *fichier)
 		affichercoordonnees(&coordonnees);
 		nombre_client++;
 	}
-/* non demander par l'exo mais c'est facile a compter */
 	printf("il y a %d clients\n",nombre_client);
 }
 
