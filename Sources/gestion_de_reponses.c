@@ -37,7 +37,7 @@ void ajoutReponse(FILE *fichier)
 	printf("saisir mot cle : ");
 	scanf("%s",*new_reponse.keyword.villes);
 	printf("saisir reponse : ");
-	scanf("%s",new_reponse.reponse.CORPS);
+	scanf(" %[^\t\n]s",new_reponse.reponse.CORPS);
 	getchar();
 	
 	afficherReponse(&new_reponse);
@@ -67,7 +67,7 @@ void afficheReponse(FILE *fichier)
 	
 /*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
-/* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
+/* on va lire des REPONSE du fichier un par un jusqua la fin du fichier*/
 	while(fread(&reponse,sizeof(REPONSE),1,fichier)!=0)
 	{	
 
