@@ -10,3 +10,4 @@ void ajout(FILE *fichier);
 void affiche(FILE *fichier);
 void lister(FILE *fichier);
 void affichercoordonnees(COORDONNEES*coordonnees);
+void supprimerCoordonnes(FILE* fichier);

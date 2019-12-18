@@ -28,29 +28,35 @@ void ajout(FILE *fichier)
 	COORDONNEES new_coordonnees;
 	char choix;
 	
-	printf("ajout\n");
+	printf("Ajout d'un nouveau client à la base de données\n");
 	/*memset memory set , force la valeur d'un champs de donnees */
 	memset(&new_coordonnees,0,sizeof(new_coordonnees));
 	
 	/* pour ajouter un nouveau client on le place a la fin*/
 	fseek(fichier,0,SEEK_END);
 	
-	printf("saisir nom : ");
+	printf("saisir le nom du client: ");
 	scanf("%s",new_coordonnees.nom);
-	printf("saisir prenom : ");
+	printf("saisir le prenom du client: ");
 	scanf("%s",new_coordonnees.prenom);
-	printf("saisir adresse e-mail : ");
+	printf("saisir l'adresse e-mail du client: ");
 	scanf("%s",new_coordonnees.adresse_mail);
+	
+	do{
+	printf("saisir l'importance du client [0;1] : ");
+	scanf("%f",&new_coordonnees.importance);
+	}while(new_coordonnees.importance <0 || new_coordonnees.importance >1);
+	
 	getchar();
 	
 	affichercoordonnees(&new_coordonnees);
 	if( DEMANDE_CONFIRMATION == 1)
 	{
-		printf("confirmer l'ajout de coordonnees? ( Y/n ) : ");
+		printf("Confirmer l'ajout du client à la base? ( Y/n ) : ");
 		scanf("%c",&choix);getchar();
 		if( choix == 'n' || choix == 'N')
 		{
-			printf("abandon creation de coordonnees \n");
+			printf("Abandon de l'ajout du client à la base de données \n");
 			return;
 		}
 	}
@@ -64,25 +70,25 @@ void affiche(FILE *fichier)
 	char nom_recherche[TAILLE_NOM];
 	char prenom_recherche[TAILLE_NOM];
 	char choix;
-	printf("affiche\n");
+	printf("Affiche les informations d'un client en fonction d'un critère de recherche\n");
 	
-	printf("choix du critere de recherche d'un client :\n");
+	printf("Choix du critere de recherche d'un client :\n");
 	printf("1 : nom | 2 prenom \n");
 	scanf("%c",&choix);getchar();
 	switch(choix)
 	{
 		case '1':
-			printf("saisi du nom a rechercher : ");
+			printf("saisi du nom du client à rechercher dans la BDD: ");
 			scanf("%s",nom_recherche);getchar();
 			break;
 			
 		case '2':
-			printf("saisi du prenom a rechercher : ");
+			printf("saisi du prenom du client à rechercher dans la BDD : ");
 			scanf("%s",prenom_recherche);getchar();
 			break;
 			
 		default :
-			printf("critere inconnu : abandon \n");
+			printf("Critere de recherche inconnu : abandon \n");
 			return;
 	}
 	
@@ -96,7 +102,7 @@ void affiche(FILE *fichier)
 		{
 			if(strcmp(nom_recherche,coordonnees.nom)==0)
 			{
-				printf("coordonnees trouve\n");
+				//~ printf("coordonnees trouve\n");
 				affichercoordonnees(&coordonnees);
 				return;
 			}
@@ -105,7 +111,7 @@ void affiche(FILE *fichier)
 		{
 			if(strcmp(prenom_recherche,coordonnees.prenom)==0)
 			{
-				printf("coordonnees trouve\n");
+				//~ printf("coordonnees trouve\n");
 				affichercoordonnees(&coordonnees);
 				return;
 			}
@@ -135,9 +141,10 @@ void lister(FILE *fichier)
 void affichercoordonnees(COORDONNEES*coordonnees)
 {
 	if(coordonnees==NULL)return;
-	printf("nom : %s\n",coordonnees->nom);
-	printf("prenom : %s\n",coordonnees->prenom);
-	printf("adresse mail : %s\n",coordonnees->adresse_mail);
+	printf("Nom du client: %s\n",coordonnees->nom);
+	printf("Prenom du client: %s\n",coordonnees->prenom);
+	printf("Adresse mail du client: %s\n",coordonnees->adresse_mail);
+	printf("Importance du client : %f\n",coordonnees->importance);
 }
 
 
@@ -146,7 +153,12 @@ void supprimerCoordonnes(FILE* fichier){
 	char nom_recherche[TAILLE_NOM];
 	char prenom_recherche[TAILLE_NOM];
 	char choix;
-	printf("Supprimer\n");
+	char const *old_FileName = "coordonnees.bin";
+    char *new_FileName = "coordonnees2.bin";
+	FILE *new_FileCoordonnees=NULL;
+	new_FileCoordonnees = ouvrir(new_FileName);
+
+	printf("Supprimer un client de la base de données\n");
 	
 	printf("choix du critere de recherche pour supprimer une coordonnee :\n");
 	printf("1 : nom | 2 prenom \n");
@@ -155,12 +167,14 @@ void supprimerCoordonnes(FILE* fichier){
 	{
 		case '1':
 			printf("saisi du nom à supprimer : ");
-			scanf("%s",nom_recherche);getchar();
+			scanf("%s",nom_recherche);
+			getchar();
 			break;
 			
 		case '2':
 			printf("saisi du prenom a rechercher : ");
-			scanf("%s",prenom_recherche);getchar();
+			scanf("%s",prenom_recherche);
+			getchar();
 			break;
 			
 		default :
@@ -170,58 +184,27 @@ void supprimerCoordonnes(FILE* fichier){
 	
 /*positionnement du curseur au debut du ficher */
 	fseek(fichier ,0,SEEK_SET);
-/* on va lire des CLIENT du fichier un par un jusqua la fin du fichier*/
+/* on va lire des coordonnées CLIENT du fichier un par un jusqu'à la fin du fichier*/
 	while(fread(&coordonnees,sizeof(COORDONNEES),1,fichier)!=0)
 	{	
 /* pour chaque mode de recherche on va appliquer la bonne comparaison*/
 		if(choix == '1')
 		{
-			if(strcmp(nom_recherche,coordonnees.nom)==0)
+			if((strcmp(nom_recherche,coordonnees.nom)==0) || (strcmp(prenom_recherche,coordonnees.prenom)==0))
 			{
-				printf("coordonnees trouve\n");
-				//~ affichercoordonnees(&coordonnees);
-				//~ ftruncate(int fildes, sizeof(COORDONNEES));
-				fwrite(&coordonnees,sizeof(COORDONNEES),1,fichier);
-				return;
+				printf("coordonnees trouvees donc on ne fait rien\n");
 			}
 		}
-		else if ( choix == '2')
+		else
 		{
-			if(strcmp(prenom_recherche,coordonnees.prenom)==0)
-			{
-				printf("coordonnees trouve\n");
-				//~ affichercoordonnees(&coordonnees);
-				
-				return;
-			}
-		}
+			fwrite(&coordonnees,sizeof(COORDONNEES),1,new_FileCoordonnees);
+		}	
 	}
+	fermer(fichier);
+	fermer(new_FileCoordonnees);
+	remove(old_FileName);
+    rename(new_FileName, old_FileName);
+    ouvrir("coordonnees.bin");
 /* si on est arrive ici on n'a donc pas trouver le client */	
 	printf("Client introuvable \n");
 }
-
-
-//~ void modifier_base_de_donnees(FILE *donnees)
-//~ {
-    //~ char mot_cle[30];
-    //~ char mot_a_modifier[30];
-    //~ char nouveau_mot[30];
-    //~ char const *ancien_nom = "coordonnees.bin";
-    //~ char const *nouveau_nom = "coordonnees2.bin";
-    //~ FILE *coordonnees2;
- 
-    //~ coordonnees2 = fopen(nouveau ,"w");
-    //~ printf("entrez le mot que vous voulez changer\n");
-    //~ scanf("%s",mot_a_modifier);
-    //~ printf("entrez le nouveau mot\n");
-    //~ scanf("%s",nouveau_mot);
- 
-    //~ while (fscanf(donnees, "%s", mot_cle) == 1)
-        //~ if (strcmp(mot_cle, mot_a_modifier) == 0)
-            //~ fprintf(coordonnees2, "%s\n", mot_a_modifier);
-        //~ else
-            //~ fprintf(coordonnees2, "%s\n", mot_cle);
- 
-    //~ remove(ancien);
-    //~ rename(ancien, nouveau);
-//~ }
