@@ -1,10 +1,11 @@
-#include "../Headers/e_mail.h"
+#include "../Headers/reponses.h"
 #include <stdio.h>
 #include <string.h>
 #define DEMANDE_CONFIRMATION 1
 
 void afficherMail(email*mail);
-void saisieMail(FILE *fichier);
+email saisieMail(FILE *fichier);
+void envoiReponseMail(FILE *fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes);
 
 //~ FILE*ouvrirReponse(char*nom_fichier)
 //~ {
@@ -25,7 +26,7 @@ void saisieMail(FILE *fichier);
 	//~ fclose (fichier_ouvert);
 //~ }
 
-void saisieMail(FILE *fichier)
+email saisieMail(FILE *fichier)
 {
 	email new_mail;
 	char choix;
@@ -39,6 +40,8 @@ void saisieMail(FILE *fichier)
 	
 	printf("saisir votre adresse : ");
 	scanf("%s",new_mail.EM);
+	printf("saisir l'adresse du destinataire : ");
+	scanf("%s",new_mail.DEST);
 	printf("saisir objet : ");
 	scanf(" %[^\t\n]s",new_mail.OBJ);
 	printf("saisir corps mail : ");
@@ -57,13 +60,47 @@ void saisieMail(FILE *fichier)
 		}
 	}
 	fwrite(&new_mail,sizeof(email),1,fichier);
-	printf("reponse cree\n");	
+	printf("reponse cree\n");
+	return new_mail;
 }
 
 void afficherMail(email*mail)
 {
 	if(mail==NULL)return;
+	printf("Affiche mail\n");
 	printf("EM : %s\n",mail->EM);
+	printf("DEST : %s\n",mail->DEST);
 	printf("OBJ : %s\n",mail->OBJ);
 	printf("CORPS : %s\n",mail->CORPS);
+	printf("\n\n\n");
+}
+
+
+void envoiReponseMail(FILE *fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes)
+{
+	REPONSE reponse;
+	email new_mail;
+	//~ char choix;
+	
+	printf("envoi reponse mail\n");
+	/*memset memory set , force la valeur d'un champs de donnees */
+	memset(&new_mail,0,sizeof(new_mail));
+	
+	/* pour ajouter un nouveau client on le place a la fin*/
+	fseek(fichier_reponses,0,SEEK_END);
+	
+	while(fread(&reponse,sizeof(REPONSE),1,fichier_reponses)!=0)
+	{
+		printf("CACA\n");
+		if(strstr(mailRecu.CORPS, *reponse.keyword.villes) != NULL){
+			*new_mail.EM = *mailRecu.DEST;
+			*new_mail.DEST = *mailRecu.EM;
+			*new_mail.CORPS = *reponse.reponse.CORPS;
+			fwrite(&new_mail,sizeof(email),1,fichier_mailEnvoyes);
+			printf("reponse trouve\n");
+			return;
+		}
+	}
+/* si on est arrive ici on n'a donc pas trouver le client */	
+	printf("Reponse introuvable \n");
 }

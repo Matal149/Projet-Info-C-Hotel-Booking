@@ -182,7 +182,7 @@ void supprimerCoordonnes(FILE* fichier){
 				printf("coordonnees trouve\n");
 				//~ affichercoordonnees(&coordonnees);
 				//~ ftruncate(int fildes, sizeof(COORDONNEES));
-				fwrite(&new_coordonnees,sizeof(COORDONNEES),1,fichier);
+				fwrite(&coordonnees,sizeof(COORDONNEES),1,fichier);
 				return;
 			}
 		}

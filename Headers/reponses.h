@@ -8,6 +8,7 @@
 typedef struct{
 	KEYWORDS keyword;
 	email reponse;
+	//~ char reponse[TAILLE_CORPS];
 }REPONSE;
 
 FILE*ouvrirReponse(char*nom_fichier);

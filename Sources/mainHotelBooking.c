@@ -6,33 +6,38 @@
 
 #include <stdio.h>
 #include "../Headers/gestion_de_fichier.h"
+//~ #include "../Headers/traitement_de_mail.h"
 //~ #include "../Headers/e_mail.h"
 //~ #include "../Headers/keywords.h"
 #include "../Headers/reponses.h"
 
-void menuGeneral(FILE* fichier_coordonnees, FILE* fichier_keywords);
+void menuGeneral(FILE* fichier_coordonnees, FILE* fichier_keywords, FILE* fichier_mail, FILE* fichier_mailEnvoyes);
 
 int main(int argc, char **argv)
 {
 	/* Test fontion gestion_de_fichier.c*/
 	FILE*fichier_coordonnees=NULL;
 	FILE*fichier_keywords=NULL;
+	FILE*fichier_mail=NULL;
+	FILE*fichier_mailEnvoyes=NULL;
 
 	fichier_coordonnees = ouvrir("coordonnees.bin");
 	fichier_keywords = ouvrirReponse("reponses.bin");
+	fichier_mail = ouvrir("mailsRecu.bin");
+	fichier_mailEnvoyes = ouvrir("mailsEnvoyes.bin");
 	//~ ajout(fichier_coordonnes);
 	//~ affiche(fichier_coordonnes);
 	//~ lister(fichier_coordonnes);
 	
 	
-	menuGeneral(fichier_coordonnees, fichier_keywords);
+	menuGeneral(fichier_coordonnees, fichier_keywords, fichier_mail, fichier_mailEnvoyes);
 	
 	return 0;
 }
 
 
 
-void menuGeneral(FILE* fichier_coordonnes, FILE* fichier_keywords)
+void menuGeneral(FILE* fichier_coordonnes, FILE* fichier_keywords, FILE* fichier_mail, FILE* fichier_mailEnvoyes)
 {
 	char choix;
 	do
@@ -100,6 +105,11 @@ void menuGeneral(FILE* fichier_coordonnes, FILE* fichier_keywords)
 			case '2':
 				//~ menuUtilisateur(fichier);
 				printf("MODE USER\n");
+				email mail;
+				mail = saisieMail(fichier_mail);
+				afficherMail(&mail);
+				envoiReponseMail(fichier_keywords, mail, fichier_mailEnvoyes);
+
 				break;
 				
 			case 'q':
