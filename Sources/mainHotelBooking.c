@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 }
 
 
-
+/* Fonction gérer les évènements des touches appuyées */
 void menuGeneral(FILE* fichier_coordonnes, FILE* fichier_keywords, FILE* fichier_mail, FILE* fichier_mailEnvoyes)
 {
 	char choixGeneral;
@@ -89,7 +89,8 @@ void menuGeneral(FILE* fichier_coordonnes, FILE* fichier_keywords, FILE* fichier
 					
 					case 's':
 					case 'S':
-						supprimerCoordonnes(fichier_coordonnes);
+						//~ supprimerCoordonnes(fichier_coordonnes);
+						printf("Fonctionnalité en cours de développement\n");
 					break;
 					
 					case 'r':

@@ -7,6 +7,8 @@ void afficherMail(email*mail);
 email saisieMail(FILE *fichier);
 void envoiReponseMail(FILE *fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes);
 
+
+/* Fonction de saisir un mail */
 email saisieMail(FILE *fichier)
 {
 	email new_mail;
@@ -19,10 +21,18 @@ email saisieMail(FILE *fichier)
 	/* pour ajouter un nouveau client on le place a la fin*/
 	fseek(fichier,0,SEEK_END);
 	
-	printf("saisir votre adresse : ");
-	scanf("%s",new_mail.EM);
-	printf("saisir l'adresse du destinataire : ");
-	scanf("%s",new_mail.DEST);
+	do
+	{
+		printf("saisir votre adresse : ");
+		scanf("%s",new_mail.EM);
+	}while((strstr(new_mail.EM, "@") == NULL) );
+	
+	do
+	{
+		printf("saisir l'adresse du destinataire : ");
+		scanf("%s",new_mail.DEST);
+	}while((strstr(new_mail.DEST, "@") == NULL) );
+	
 	printf("saisir objet : ");
 	scanf(" %[^\t\n]s",new_mail.OBJ);
 	printf("saisir corps mail : ");
@@ -45,6 +55,7 @@ email saisieMail(FILE *fichier)
 	return new_mail;
 }
 
+/* Fonction permettant d'afficher les informations composant un mail */
 void afficherMail(email*mail)
 {
 	if(mail==NULL)return;
@@ -56,7 +67,7 @@ void afficherMail(email*mail)
 	printf("\n\n\n");
 }
 
-
+/* Fonction permettant d'envoyer une réponse type si un mot clé est détecter dans le corps du mail reçu */
 void envoiReponseMail(FILE* fichier_reponses, email mailRecu, FILE* fichier_mailEnvoyes)
 {
 	REPONSE reponse_automatique;
@@ -69,7 +80,7 @@ void envoiReponseMail(FILE* fichier_reponses, email mailRecu, FILE* fichier_mail
 	//~ printf("CORPS MAIL RECU = %s\n", mailRecu.CORPS);
 	while(fread(&reponse_automatique,sizeof(REPONSE),1,fichier_reponses)!=0)
 	{
-		if((strstr(mailRecu.CORPS, *reponse_automatique.keyword.villes) != NULL))
+		if((strstr(mailRecu.CORPS, *reponse_automatique.keyword.villes) != NULL) || (strstr(mailRecu.OBJ, *reponse_automatique.keyword.villes) != NULL))
 		{
 			strcat(new_mail.EM , mailRecu.DEST);
 			strcat(new_mail.DEST , mailRecu.EM);

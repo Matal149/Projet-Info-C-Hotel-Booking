@@ -3,6 +3,7 @@
 #include <string.h>
 #define DEMANDE_CONFIRMATION 0
 
+/* Fonction permettant d'ouvrir un fichier pour le modifier */
 FILE*ouvrirReponse(char*nom_fichier)
 {
 	FILE*f=NULL;
@@ -16,12 +17,14 @@ FILE*ouvrirReponse(char*nom_fichier)
 	return f;	
 }
 
+/* Fonction permettant de fermer un fichier */
 void fermerReponse(FILE*fichier_ouvert)
 {
 	printf("fermeture du fichier\n");
 	fclose (fichier_ouvert);
 }
 
+/* Fonction d'ajouter une réponse ainsi que le mot clé dans la base de données */
 void ajoutReponse(FILE *fichier)
 {
 	REPONSE new_reponse;
@@ -55,6 +58,7 @@ void ajoutReponse(FILE *fichier)
 	printf("reponse cree\n");	
 }
 
+/* Fonction permettant d'afficher un mot clé ainsi que sa réponse associée dans la base en recherchant par un mot clé */
 void afficheReponse(FILE *fichier)
 {
 	REPONSE reponse;
@@ -82,6 +86,7 @@ void afficheReponse(FILE *fichier)
 	
 }
 
+/* Fonction permettant de lister tous les mots clés et leurs réponses associées de la base */
 void listerReponse(FILE *fichier)
 {
 	REPONSE reponse;
@@ -99,6 +104,8 @@ void listerReponse(FILE *fichier)
 	printf("il y a %d réponses possibles\n",nombre_reponse);
 }
 
+
+/* Fonction permettant d'afficher une réponse de la base */
 void afficherReponse(REPONSE*reponse)
 {
 	if(reponse==NULL)return;

@@ -4,10 +4,12 @@
 #include <unistd.h>
 #define DEMANDE_CONFIRMATION 0
 
+
+/* Fonction permettant d'ouvrir un fichier pour le modifier */
 FILE*ouvrir(char*nom_fichier)
 {
 	FILE*f=NULL;
-	printf("ouverture du fichier [%s]\n",nom_fichier);
+	//~ printf("ouverture du fichier [%s]\n",nom_fichier);
 /* fopen mode a = append = "ajouter a la fin" ouvre le fichier s'il */
 /* existe et place le pointeur a la fin si le fichier n'existe pas  */
 /* le fichier est cree */
@@ -17,12 +19,14 @@ FILE*ouvrir(char*nom_fichier)
 	return f;	
 }
 
+/* Fonction permettant de fermer un fichier */
 void fermer(FILE*fichier_ouvert)
 {
-	printf("fermeture du fichier\n");
+	//~ printf("fermeture du fichier\n");
 	fclose (fichier_ouvert);
 }
 
+/* Fonction d'ajouter un client dans la base de données, en entrant ses coordonnées */
 void ajout(FILE *fichier)
 {
 	COORDONNEES new_coordonnees;
@@ -39,9 +43,15 @@ void ajout(FILE *fichier)
 	scanf("%s",new_coordonnees.nom);
 	printf("saisir le prenom du client: ");
 	scanf("%s",new_coordonnees.prenom);
-	printf("saisir l'adresse e-mail du client: ");
-	scanf("%s",new_coordonnees.adresse_mail);
 	
+	/* On demande à l'administrateur de rentrer l'addresse mail tant que le format n'est pas correct, on doit trouver un @ pour que se soit correct */
+	do
+	{
+		printf("saisir l'adresse e-mail du client: ");
+		scanf("%s",new_coordonnees.adresse_mail);
+	}while((strstr(new_coordonnees.adresse_mail, "@") == NULL) );
+	
+	/* On demande à l'administrateur de rentrer l'importance du client tant qu'il rentre un nombre inférieur à 0 ou supérieur à 1 */
 	do{
 	printf("saisir l'importance du client [0;1] : ");
 	scanf("%f",&new_coordonnees.importance);
@@ -64,6 +74,7 @@ void ajout(FILE *fichier)
 	printf("coordonnees cree\n");	
 }
 
+/* Fonction permettant d'afficher les coordonées d'un client de la base en recherchant son nom ou son prénom */
 void affiche(FILE *fichier)
 {
 	COORDONNEES coordonnees;
@@ -102,7 +113,6 @@ void affiche(FILE *fichier)
 		{
 			if(strcmp(nom_recherche,coordonnees.nom)==0)
 			{
-				//~ printf("coordonnees trouve\n");
 				affichercoordonnees(&coordonnees);
 				return;
 			}
@@ -111,17 +121,17 @@ void affiche(FILE *fichier)
 		{
 			if(strcmp(prenom_recherche,coordonnees.prenom)==0)
 			{
-				//~ printf("coordonnees trouve\n");
 				affichercoordonnees(&coordonnees);
 				return;
 			}
 		}
 	}
 /* si on est arrive ici on n'a donc pas trouver le client */	
-	printf("Client introuvable \n");
+	printf("Client introuvable dans la base de données\n");
 	
 }
 
+/* Fonction permettant de lister tous les clients de la base en affichant leurs informations */
 void lister(FILE *fichier)
 {
 	COORDONNEES coordonnees;
@@ -138,6 +148,7 @@ void lister(FILE *fichier)
 	printf("il y a %d clients\n",nombre_client);
 }
 
+/* Fonction permettant d'afficher les coordonées d'un client */
 void affichercoordonnees(COORDONNEES*coordonnees)
 {
 	if(coordonnees==NULL)return;
